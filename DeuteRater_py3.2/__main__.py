@@ -42,7 +42,7 @@ import Theory_Preparation_vrs3 as tp
 
 import Rate_Calculator_vrs8 as rc
 import Grapher as g
-from PyQt4 import QtCore, QtGui, uic
+from PyQt5 import QtCore, QtGui, uic, QtWidgets
 import Settings
 import Filter_Menu
 import AdvSettings
@@ -63,9 +63,9 @@ user_settings = pd.Series({"N_ISOS": 5, "lowZ": 1, "hiZ": 5, "timeWindow": 1.5, 
 static_filters = pd.Series({"mass cutoff": 2400, "Peaks included if over mass cutoff": 5,"Peaks included if under mass cutoff": 4,  "Weight Agreement":3, "MZ Filter":0.00, "RT Filter":0.00, "Required Sequence Length" : 6, "Number of Processors": mp.cpu_count()-1, "Required Number of Labels": 10, "Minimum Abund Change":.04, "Zero Labeling Check": .05, "Abundance Agreement Filter" : .1, "neutromer spacing Agreement Filter":.1, "Combined Agreement Filter" : .1,"ZCUTOFF":1, "Error of Zero":.01, "Error of non-replicated point":.05})
 #used https://www.safaribooksonline.com/blog/2014/01/22/create-basic-gui-using-pyqt/ tutorial for gui init function and form_class call
 form_class = uic.loadUiType(os.path.join(location,"Main_Menu.ui"))[0]
-class InteractWithUser(QtGui.QMainWindow, form_class):
+class InteractWithUser(QtWidgets.QMainWindow, form_class):
     def __init__(self, parent = None):
-        QtGui.QMainWindow.__init__(self,parent)
+        QtWidgets.QMainWindow.__init__(self,parent)
         self.user_settings = user_settings
         self.static_filters = static_filters
         self.setupUi(self)
@@ -90,12 +90,12 @@ class InteractWithUser(QtGui.QMainWindow, form_class):
         self.ctrl_y_primed = False
         self.Labeling_Data.currentItemChanged.connect(self.store)
         self.Labeling_Data.itemChanged.connect(self.single_change) 
-        QtGui.QShortcut(QtGui.QKeySequence('Ctrl+z'),self).activated.connect(self.Undo)
-        QtGui.QShortcut(QtGui.QKeySequence('Ctrl+y'),self).activated.connect(self.Redo)
-        QtGui.QShortcut(QtGui.QKeySequence('Ctrl+v'),self).activated.connect(self.Paste)  #http://stackoverflow.com/questions/21682261/paste-in-the-field-of-qtableview answer 1 accessed 1/28/2016
-        QtGui.QShortcut(QtGui.QKeySequence('Ctrl+c'),self).activated.connect(self.Copy)
-        QtGui.QShortcut(QtGui.QKeySequence('Backspace'),self).activated.connect(self.Clear_Contents)
-        QtGui.QShortcut(QtGui.QKeySequence('Del'),self).activated.connect(self.Clear_Contents)
+        QtWidgets.QShortcut(QtGui.QKeySequence('Ctrl+z'),self).activated.connect(self.Undo)
+        QtWidgets.QShortcut(QtGui.QKeySequence('Ctrl+y'),self).activated.connect(self.Redo)
+        QtWidgets.QShortcut(QtGui.QKeySequence('Ctrl+v'),self).activated.connect(self.Paste)  #http://stackoverflow.com/questions/21682261/paste-in-the-field-of-qtableview answer 1 accessed 1/28/2016
+        QtWidgets.QShortcut(QtGui.QKeySequence('Ctrl+c'),self).activated.connect(self.Copy)
+        QtWidgets.QShortcut(QtGui.QKeySequence('Backspace'),self).activated.connect(self.Clear_Contents)
+        QtWidgets.QShortcut(QtGui.QKeySequence('Del'),self).activated.connect(self.Clear_Contents)
         
     #using selected indicies modeled on http://stackoverflow.com/questions/27981202/row-and-column-numbers-of-selected-cells-in-qtablewidget response 1, accessed 1/28/2016
     def Grid_Locations(self, all_data = False):
@@ -181,7 +181,7 @@ class InteractWithUser(QtGui.QMainWindow, form_class):
                 final += i
                 final +='\n'
             # from question in: http://stackoverflow.com/questions/1073550/pyqt-clipboard-doesnt-copy-to-system-clipboard accessed 1/28/2016
-            clipboard = QtGui.QApplication.clipboard()
+            clipboard = QtWidgets.QApplication.clipboard()
             clipboard.setText(final[:-1]) # get rid of last newline
         except:
            c = "copy"
@@ -189,7 +189,7 @@ class InteractWithUser(QtGui.QMainWindow, form_class):
         #try except if they try and paste not in table.
         try:
             current_row, current_column = self.Grid_Locations() #get top left corner of user selection and start there
-            text = QtGui.QApplication.clipboard().text()
+            text = QtWidgets.QApplication.clipboard().text()
             # text parsing inspired by https://riverbankcomputing.com/pipermail/pyqt/2013-May/032761.html accessed 1/28/16
             text = text.split('\n')#split rows
             text = list(text) #keep in mind we are in a pyqt gui, so all data types are Qlists and Qstrings unless you force th issue
@@ -243,15 +243,15 @@ class InteractWithUser(QtGui.QMainWindow, form_class):
         return AA_DICT
     def MichaelTest(self):
         make_folder(self.user_settings["Input Folder"])
-        QtGui.QMessageBox.information(self, "Info", "Please select an id file")
+        QtWidgets.QMessageBox.information(self, "Info", "Please select an id file")
         bad_files = False
-        idFileName = str(QtGui.QFileDialog.getOpenFileName(self, "Select ID file", self.user_settings["Input Folder"]))
+        idFileName = str(QtWidgets.QFileDialog.getOpenFileName(self, "Select ID file", self.user_settings["Input Folder"]))
         while idFileName[-4:] != ".tsv" and idFileName[-4:] != ".csv"and idFileName != "":
-             QtGui.QMessageBox.information(self, "Bad Input", "That is not a .tsv or .csv file.  Please choose a csv or tsv file.")
-             idFileName = str(QtGui.QFileDialog.getOpenFileName(self, "Select ID file", self.user_settings["Input Folder"]))
+             QtWidgets.QMessageBox.information(self, "Bad Input", "That is not a .tsv or .csv file.  Please choose a csv or tsv file.")
+             idFileName = str(QtWidgets.QFileDialog.getOpenFileName(self, "Select ID file", self.user_settings["Input Folder"]))
         if idFileName == "":
             return
-        QtGui.QMessageBox.information(self, "Info", "Please select mzml(s) to extract")   
+        QtWidgets.QMessageBox.information(self, "Info", "Please select mzml(s) to extract")   
         continue_loop = True
         if not os.path.isdir(self.user_settings["Output Folder"]):
             os.makedirs(self.user_settings["Output Folder"])
@@ -259,7 +259,7 @@ class InteractWithUser(QtGui.QMainWindow, form_class):
         while continue_loop:
             mzmlList = []
             bad_input = False
-            data = QtGui.QFileDialog.getOpenFileNames(self, "Select mzML files", os.path.dirname(idFileName))
+            data = QtWidgets.QFileDialog.getOpenFileNames(self, "Select mzML files", os.path.dirname(idFileName))
             if data == "": return
             else:
                 for path in data:
@@ -268,7 +268,7 @@ class InteractWithUser(QtGui.QMainWindow, form_class):
                         break
                     else:mzmlList.append(str(path))
                 if bad_input:
-                    QtGui.QMessageBox.information(self, "Error", "One of the files you selected was not an mzML.  Please try again")
+                    QtWidgets.QMessageBox.information(self, "Error", "One of the files you selected was not an mzML.  Please try again")
                 else: continue_loop = False
         mzml_len = len(mzmlList)
         if mzml_len != 0:
@@ -281,29 +281,29 @@ class InteractWithUser(QtGui.QMainWindow, form_class):
                 basename = os.path.join(self.user_settings["Input Folder"], '{}.csv'.format(f.split(".")[0]))
                 error = extract(idFileName,specFile,basename,self.user_settings["N_ISOS"],self.user_settings["lowZ"],self.user_settings["hiZ"],self.user_settings["timeWindow"],self.user_settings["ppmWindow"])
                 if error == "ID":
-                    QtGui.QMessageBox.information(self, "Error", "Your ID file has bad headers or data.  Please correct and try again.")
+                    QtWidgets.QMessageBox.information(self, "Error", "Your ID file has bad headers or data.  Please correct and try again.")
                     break
                 elif error != "":
                     error_message += error
         try:
             if error_message != "":
                 final_error = "mzML file(s) " + error_message+ "had errors in form or data and could not be extracted."
-                QtGui.QMessageBox.information(self, "Error", final_error)
+                QtWidgets.QMessageBox.information(self, "Error", final_error)
             elif error == "":
-                QtGui.QMessageBox.information(self, "Done", "Your Extraction is Complete")
+                QtWidgets.QMessageBox.information(self, "Done", "Your Extraction is Complete")
         except UnboundLocalError:
             dummy = 0
         self.Update_User.setText("Waiting for Command")
         app.processEvents()
     def choose_input_folder(self):
         make_folder(self.user_settings["Input Folder"])
-        folder = QtGui.QFileDialog.getExistingDirectory(self, "Select a Folder", self.user_settings["Input Folder"], QtGui.QFileDialog.ShowDirsOnly)
+        folder = QtWidgets.QFileDialog.getExistingDirectory(self, "Select a Folder", self.user_settings["Input Folder"], QtWidgets.QFileDialog.ShowDirsOnly)
         #returns an empty string if nothing is chosen so we can't have it be an empty string or stuff will error.
         if len(str(folder)) > 0:
             self.user_settings["Input Folder"] = str(folder)
     def choose_output_folder(self):
         make_folder(self.user_settings["Output Folder"])
-        folder = QtGui.QFileDialog.getExistingDirectory(self, "Select a Folder",  self.user_settings["Output Folder"], QtGui.QFileDialog.ShowDirsOnly)
+        folder = QtWidgets.QFileDialog.getExistingDirectory(self, "Select a Folder",  self.user_settings["Output Folder"], QtWidgets.QFileDialog.ShowDirsOnly)
         if len(str(folder)) > 0:
             self.user_settings["Output Folder"] = str(folder)
     def Set_Settings(self):
@@ -317,24 +317,24 @@ class InteractWithUser(QtGui.QMainWindow, form_class):
         self.set_adv_menu.show()    
     def ExitButton(self):
         # from http://stackoverflow.com/questions/1414781/prompt-on-exit-in-pyqt-application
-        reply = QtGui.QMessageBox.question(self, "Quit Option", "Are you sure you wish to exit?", QtGui.QMessageBox.Yes, QtGui.QMessageBox.No)
-        if reply == QtGui.QMessageBox.Yes:
+        reply = QtWidgets.QMessageBox.question(self, "Quit Option", "Are you sure you wish to exit?", QtWidgets.QMessageBox.Yes, QtWidgets.QMessageBox.No)
+        if reply == QtWidgets.QMessageBox.Yes:
             self.close()
     def MakeTable(self):
         try:
             if len(os.listdir(self.user_settings["Input Folder"])) <1 :
                 #used qtgui examples
-                QtGui.QMessageBox.information(self, "Empty Folder","Please choose a folder with data from the pull down menu.")
+                QtWidgets.QMessageBox.information(self, "Empty Folder","Please choose a folder with data from the pull down menu.")
                 return
         except:
-            QtGui.QMessageBox.information(self, "Input Folder does not exist","Please choose a folder that exists.")
+            QtWidgets.QMessageBox.information(self, "Input Folder does not exist","Please choose a folder that exists.")
             return
         self.filenames =[]
         for thing in os.listdir(self.user_settings["Input Folder"]):
             if os.path.isfile(os.path.join(self.user_settings["Input Folder"], thing)) and thing[-4:] == ".csv":
                 self.filenames.append(thing)
         if len(self.filenames) < 1:
-            QtGui.QMessageBox.information(self, "Empty Folder","Folder has no .csv files.  Please choose a folder with files from the pull down menu.")
+            QtWidgets.QMessageBox.information(self, "Empty Folder","Folder has no .csv files.  Please choose a folder with files from the pull down menu.")
         self.Labeling_Data.blockSignals(True)
         self.Labeling_Data.setRowCount(len(self.filenames))
         for r in range(len(self.filenames)):
@@ -351,18 +351,18 @@ class InteractWithUser(QtGui.QMainWindow, form_class):
         water_table = []
         too_high = False
         if not os.path.isdir(user_settings["Input Folder"]):
-            QtGui.QMessageBox.information(self, "Error", "Input Folder does not exist.")
+            QtWidgets.QMessageBox.information(self, "Error", "Input Folder does not exist.")
             return
         try:
             if self.Labeling_Data.rowCount() == 0:
-                QtGui.QMessageBox.information(self, "Error", "Labeling Table does not exist.")
+                QtWidgets.QMessageBox.information(self, "Error", "Labeling Table does not exist.")
                 return
             filenames = []
             for thing in os.listdir(self.user_settings["Input Folder"]):
                 if os.path.isfile(os.path.join(self.user_settings["Input Folder"], thing)) and thing[-4:] == ".csv":
                    filenames.append(thing)
             if filenames != self.filenames:
-                QtGui.QMessageBox.information(self, "Error", "Filenames in Input Folder do not match filenames in labeling table. Please correct before proceeding.")
+                QtWidgets.QMessageBox.information(self, "Error", "Filenames in Input Folder do not match filenames in labeling table. Please correct before proceeding.")
                 return
             for row in range(self.Labeling_Data.rowCount()):
                 final_row = []
@@ -372,32 +372,32 @@ class InteractWithUser(QtGui.QMainWindow, form_class):
                         if self.filenames[row] == str(thing.text()):
                             final_row.append(str(thing.text()))
                         else:
-                            QtGui.QMessageBox.information(self, "Error", "Filenames have been altered.  Please correct.")
+                            QtWidgets.QMessageBox.information(self, "Error", "Filenames have been altered.  Please correct.")
                             return
                     else: 
                         try:
                             value = float(thing.text())
                             if value < 0:
-                                QtGui.QMessageBox.information(self, "Error", "Negative time or labeling make no sense.")
+                                QtWidgets.QMessageBox.information(self, "Error", "Negative time or labeling make no sense.")
                                 return
                             if i == 2 and value > 1:
-                                QtGui.QMessageBox.information(self, "Error", "Too much label: Please enter labeling in decimal.")
+                                QtWidgets.QMessageBox.information(self, "Error", "Too much label: Please enter labeling in decimal.")
                                 return
                             if i == 2 and value > user_settings["Maximum Theoretical Percent"] and not Advanced_Settings[0]: too_high = True
                             final_row.append(value)
                         except:
-                            QtGui.QMessageBox.information(self, "Error","Labeling Table contains text or blanks. Please correct.")
+                            QtWidgets.QMessageBox.information(self, "Error","Labeling Table contains text or blanks. Please correct.")
                             return
                 water_table.append(final_row)
         except AttributeError:
-            QtGui.QMessageBox.information(self, "Labeling Table Non-Existant","Please create table.")
+            QtWidgets.QMessageBox.information(self, "Labeling Table Non-Existant","Please create table.")
         if too_high:
-            message = QtGui.QMessageBox.question(self, "Quit Option", "Experimental labeling exceeds theoretical labeling.  This can cause inaccurate data.  Do you wish to continue?", QtGui.QMessageBox.Yes, QtGui.QMessageBox.No)
-            if message == QtGui.QMessageBox.No:
+            message = QtWidgets.QMessageBox.question(self, "Quit Option", "Experimental labeling exceeds theoretical labeling.  This can cause inaccurate data.  Do you wish to continue?", QtWidgets.QMessageBox.Yes, QtWidgets.QMessageBox.No)
+            if message == QtWidgets.QMessageBox.No:
                 return
         AA_DICT = self.get_labeling_info()
         if type(AA_DICT) == str:
-            QtGui.QMessageBox.information(self, "Error",AA_DICT)
+            QtWidgets.QMessageBox.information(self, "Error",AA_DICT)
             return
         print ("Beginning Analysis")
         make_folder(self.user_settings["Output Folder"])
@@ -414,10 +414,10 @@ class InteractWithUser(QtGui.QMainWindow, form_class):
         app.processEvents()
         panda, errors = tp.begin_preparation(self.user_settings, self.static_filters, self.filenames, AA_DICT)
         if errors != "":
-            QtGui.QMessageBox.information(self, "Error", "Files: {0} were not in the correct format or contained improper data. They will be ignored for the rest of the analysis".format(errors))
+            QtWidgets.QMessageBox.information(self, "Error", "Files: {0} were not in the correct format or contained improper data. They will be ignored for the rest of the analysis".format(errors))
         panda = panda[panda['sequence'].str.len() >= self.static_filters["Required Sequence Length"]]
         if len(panda) == 0:
-            QtGui.QMessageBox.information(self, "Insufficient IDs made it through filter",
+            QtWidgets.QMessageBox.information(self, "Insufficient IDs made it through filter",
                     "Use better data or relax the filters.")
             return
         print ("Saving Intermediate Files")
@@ -477,14 +477,14 @@ class InteractWithUser(QtGui.QMainWindow, form_class):
                 self.Update_User.setText("Performing Experimental Isotope Calculations")
                 app.processEvents()
                 mc.Calculate(datamanip, panda, self.water, self.user_settings, self.static_filters)
-                reply = QtGui.QMessageBox.question(self, "Done", "Your Analysis is Complete.  Would you like to calculate rates as well?", QtGui.QMessageBox.Yes, QtGui.QMessageBox.No)
-                if reply == QtGui.QMessageBox.Yes:
+                reply = QtWidgets.QMessageBox.question(self, "Done", "Your Analysis is Complete.  Would you like to calculate rates as well?", QtWidgets.QMessageBox.Yes, QtWidgets.QMessageBox.No)
+                if reply == QtWidgets.QMessageBox.Yes:
                     self.Rate_Analysis()
                 else:
                     self.Update_User.setText("Waiting for Command")
                     app.processEvents()
             else:
-                QtGui.QMessageBox.information(self, "Error", "All sequences contained too much labeling to calculate")
+                QtWidgets.QMessageBox.information(self, "Error", "All sequences contained too much labeling to calculate")
                 self.Update_User.setText("Waiting for Command")
                 app.processEvents()
         else:
@@ -539,21 +539,21 @@ class InteractWithUser(QtGui.QMainWindow, form_class):
                 app.processEvents()
                 
                 mc.Calculate(datamanip, panda, self.water, self.user_settings, self.static_filters)
-                reply = QtGui.QMessageBox.question(self, "Done", "Your Analysis is Complete.  Would you like to calculate rates as well?", QtGui.QMessageBox.Yes, QtGui.QMessageBox.No)
-                if reply == QtGui.QMessageBox.Yes:
+                reply = QtWidgets.QMessageBox.question(self, "Done", "Your Analysis is Complete.  Would you like to calculate rates as well?", QtWidgets.QMessageBox.Yes, QtWidgets.QMessageBox.No)
+                if reply == QtWidgets.QMessageBox.Yes:
                     self.Rate_Analysis()
                 else:
                     self.Update_User.setText("Waiting for Command")
                     app.processEvents()
             else:
-                QtGui.QMessageBox.information(self, "Error", "All sequences contained too much labeling to calculate")
+                QtWidgets.QMessageBox.information(self, "Error", "All sequences contained too much labeling to calculate")
                 self.Update_User.setText("Waiting for Command")
                 app.processEvents()
         
         
     def Rate_Analysis(self):
         if not os.path.isdir(user_settings["Output Folder"]):
-            QtGui.QMessageBox.information(self, "Error", "Output Folder does not exist.")
+            QtWidgets.QMessageBox.information(self, "Error", "Output Folder does not exist.")
             return 
         if os.path.isfile(os.path.join(self.user_settings["Output Folder"], "Calculation_of_Fraction_New_Protein.csv")) and os.path.isfile(os.path.join(self.user_settings["Output Folder"], "Time_and_Labeling_Data.csv")):
             columns = ["file", "Protein ID", 'Protein name', 'Experimental_Amount_of_Label (eaol) (0 = {0})'.format(self.static_filters["Zero Labeling Check"]), "sequence"]
@@ -566,25 +566,25 @@ class InteractWithUser(QtGui.QMainWindow, form_class):
             try:
                 complete_data = pd.read_csv(os.path.join(self.user_settings["Output Folder"], "Calculation_of_Fraction_New_Protein.csv"),  usecols = columns, low_memory = False)
             except:
-                QtGui.QMessageBox.information(self, "Error", "Your Calculation_of_Fraction_New_Protein could not be read, possibly due to missing or mis-labled headers.  check you calculation type and try again.")
+                QtWidgets.QMessageBox.information(self, "Error", "Your Calculation_of_Fraction_New_Protein could not be read, possibly due to missing or mis-labled headers.  check you calculation type and try again.")
                 return
             try:
                 water = pd.read_csv(os.path.join(self.user_settings["Output Folder"], "Time_and_Labeling_Data.csv"), usecols = ["file", "time"])
                 water = water.dropna()
             except:
-                QtGui.QMessageBox.information(self, "Error", "Your Time_and_Labeling.csv could not be read")
+                QtWidgets.QMessageBox.information(self, "Error", "Your Time_and_Labeling.csv could not be read")
                 return
             if water["time"].dtype == np.float64 or water["time"].dtype == np.int64:
                 for i in set(complete_data["file"]):
                     if i not in list(water["file"]):
-                        QtGui.QMessageBox.information(self, "Error", "Time_and_Labeling.csv is missing file names from Calculation_of_Fraction_New_Protein or time data for them. Please correct before proceeding")
+                        QtWidgets.QMessageBox.information(self, "Error", "Time_and_Labeling.csv is missing file names from Calculation_of_Fraction_New_Protein or time data for them. Please correct before proceeding")
                         return 
             else:
-                QtGui.QMessageBox.information(self, "Error", "Time_and_Labeling.csv has non-numbers in the time column")
+                QtWidgets.QMessageBox.information(self, "Error", "Time_and_Labeling.csv has non-numbers in the time column")
                 return
             water = water.set_index('file')
         else:
-            QtGui.QMessageBox.information(self, "Error", "Your output is missing Calculation_of_Fraction_New_Protein or Time_and_Labeling_Data files or both.  Correct to continue.")
+            QtWidgets.QMessageBox.information(self, "Error", "Your output is missing Calculation_of_Fraction_New_Protein or Time_and_Labeling_Data files or both.  Correct to continue.")
             return
         print ("Performing Calculations of Experimental Rates")
         self.Update_User.setText("Performing Calculations of Experimental Rates")
@@ -595,7 +595,7 @@ class InteractWithUser(QtGui.QMainWindow, form_class):
         for thing in Result:
             print (thing)
             if "Completed Successfully" not in thing:
-                QtGui.QMessageBox.information(self, "Error", thing)
+                QtWidgets.QMessageBox.information(self, "Error", thing)
             self.Update_User.setText(thing)
             app.processEvents()
         #$ get results into an output message
@@ -612,21 +612,21 @@ class InteractWithUser(QtGui.QMainWindow, form_class):
                     elif (analysis_type == "Abundance" and not self.user_settings ["Use Abundance"]) or (analysis_type == "neutromer spacing" and not self.user_settings ["Use neutromer spacing"]):
                         print ("{0} graphs was not possible due to user settings.".format(analysis_type))
                     else:
-                        QtGui.QMessageBox.information(self, "Error",
+                        QtWidgets.QMessageBox.information(self, "Error",
                         "Graphs for {0} could not be completed due to lack of data".format(analysis_type))
-        QtGui.QMessageBox.information(self, "Done", "Your Analysis is Complete")
+        QtWidgets.QMessageBox.information(self, "Done", "Your Analysis is Complete")
         self.Update_User.setText("Waiting for Command")
         app.processEvents()
         
     def Magic_Button(self):
         import MIDA_Calculator_vrs4 as mc
         message = mc.Recalculate(self.user_settings, self.static_filters)
-        QtGui.QMessageBox.information(self, "Done", message)
+        QtWidgets.QMessageBox.information(self, "Done", message)
                         
 if __name__ == '__main__':
     import sys
     mp.freeze_support()
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     cheese = InteractWithUser(None)
     cheese.show()
     app.exec_()

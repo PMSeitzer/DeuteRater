@@ -37,14 +37,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
 
-from PyQt4 import QtCore, QtGui, uic
+from PyQt5 import QtCore, QtGui, uic, QtWidgets
 import File_Alterer as FA
 import os
 location =  os.path.dirname(os.path.abspath(__file__))
 form_class = uic.loadUiType(os.path.join(location,"Advanced_Settings.ui"))[0]
 
 
-class Change_Adv_Settings(QtGui.QDialog, form_class):
+class Change_Adv_Settings(QtWidgets.QDialog, form_class):
     def __init__(self, parent = None, user = None, default = None, user_s = None, s_filters = None):
         super(Change_Adv_Settings, self).__init__(parent)
         self.setWindowTitle("Advanced Settings Menu")

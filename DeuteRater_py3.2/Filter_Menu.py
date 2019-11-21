@@ -34,14 +34,14 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 """
-from PyQt4 import QtCore, QtGui, uic
+from PyQt5 import QtCore, QtGui, uic, QtWidgets
 import os
 import multiprocessing as mp
 location =  os.path.dirname(os.path.abspath(__file__))
 form_class = uic.loadUiType(os.path.join(location,"Filters_Menu.ui"))[0]
 #set max for processors when this opens
 # when assinging it a value check that it is between 1 and max inclusive
-class Change_Filters(QtGui.QDialog, form_class):
+class Change_Filters(QtWidgets.QDialog, form_class):
     def __init__(self, parent = None, stuff = None, defaults = None):
         super(Change_Filters, self).__init__(parent)
         self.filters = stuff #make the settings passed in a self variable for easier manipulation (this will pass back to the main without a return)

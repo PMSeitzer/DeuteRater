@@ -38,7 +38,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #am not currently familiar enough with inheritance using pyqt to mess with the inheritance
 #this could seriously benefit from inheritance so change that as time permits
 
-from PyQt4 import QtCore, QtGui, uic
+from PyQt5 import QtCore, QtGui, uic, QtWidgets
 import sys,os
 import csv
 import pandas as pd
@@ -76,8 +76,9 @@ def additional_row(table):
     for i in range(table.columnCount()):
         table.setItem(new_count-1, i, QtGui.QTableWidgetItem())
         table.item(new_count-1,i).setText("")  
-        
-class alter_element_composition(QtGui.QDialog, elem_comp_class):
+
+
+class alter_element_composition(QtWidgets.QDialog, elem_comp_class):
     def __init__(self, parent = None):
         super(alter_element_composition, self).__init__(parent)
         self.setupUi(self)  
@@ -138,7 +139,7 @@ class alter_element_composition(QtGui.QDialog, elem_comp_class):
                 writer.writerow(row)
         reset_table(self.ElemTable, self.filename)
         
-class alter_mods(QtGui.QDialog, mod_class):
+class alter_mods(QtWidgets.QDialog, mod_class):
     def __init__(self, parent = None):
         super(alter_mods, self).__init__(parent)
         self.filename = os.path.join(location,"Modifications.csv")
@@ -184,7 +185,7 @@ class alter_mods(QtGui.QDialog, mod_class):
                 writer.writerow(row)
         reset_table(self.modTable, self.filename)
             
-class amount_of_labels(QtGui.QDialog, poss_label_class):
+class amount_of_labels(QtWidgets.QDialog, poss_label_class):
     def __init__(self, parent = None):
         super(amount_of_labels, self).__init__(parent)
         self.filename = os.path.join(location,"Number of Labeling Sites.csv")

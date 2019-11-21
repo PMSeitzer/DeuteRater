@@ -35,7 +35,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 """
 
-from PyQt4 import QtCore, QtGui, uic
+from PyQt5 import QtCore, QtGui, uic, QtWidgets
 import sys,os
 import csv
 location =  os.path.dirname(os.path.abspath(__file__))
@@ -49,7 +49,7 @@ with open (os.path.join(location,"Number of Labeling Sites.csv"), "rt") as infil
     for row in reader:
         labeling_conditions.append("{0} ({1})".format(row[0], row[1]))
 labeling_conditions.append('global') #add special values
-class Change_Settings(QtGui.QDialog, form_class):
+class Change_Settings(QtWidgets.QDialog, form_class):
     def __init__(self, parent = None, stuff = None, defaults = None):
         super(Change_Settings, self).__init__(parent)
         self.settings = stuff #make the settings passed in a self variable for easier manipulation (this will pass back to the main without a return)
