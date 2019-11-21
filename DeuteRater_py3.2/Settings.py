@@ -145,7 +145,7 @@ class Change_Settings(QtWidgets.QDialog, form_class):
         self.last_save = self.make_adjustments(self.settings)
 #this is for running code independantly (for testing purposes)
 if __name__ == "__main__":
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     myapp = Change_Settings()
     myapp.show()
     sys.exit(app.exec_())
