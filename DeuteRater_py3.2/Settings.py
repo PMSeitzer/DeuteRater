@@ -49,6 +49,8 @@ with open (os.path.join(location,"Number of Labeling Sites.csv"), "rt") as infil
     for row in reader:
         labeling_conditions.append("{0} ({1})".format(row[0], row[1]))
 labeling_conditions.append('global') #add special values
+
+
 class Change_Settings(QtWidgets.QDialog, form_class):
     def __init__(self, parent = None, stuff = None, defaults = None):
         super(Change_Settings, self).__init__(parent)
