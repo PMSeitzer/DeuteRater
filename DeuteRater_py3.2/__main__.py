@@ -245,10 +245,11 @@ class InteractWithUser(QtWidgets.QMainWindow, form_class):
         make_folder(self.user_settings["Input Folder"])
         QtWidgets.QMessageBox.information(self, "Info", "Please select an id file")
         bad_files = False
-        idFileName = str(QtWidgets.QFileDialog.getOpenFileName(self, "Select ID file", self.user_settings["Input Folder"]))
+        idFileName, _ = QtWidgets.QFileDialog.getOpenFileName(self, "Select ID file", self.user_settings["Input Folder"])
+        print(idFileName)
         while idFileName[-4:] != ".tsv" and idFileName[-4:] != ".csv"and idFileName != "":
              QtWidgets.QMessageBox.information(self, "Bad Input", "That is not a .tsv or .csv file.  Please choose a csv or tsv file.")
-             idFileName = str(QtWidgets.QFileDialog.getOpenFileName(self, "Select ID file", self.user_settings["Input Folder"]))
+             idFileName, _ = QtWidgets.QFileDialog.getOpenFileName(self, "Select ID file", self.user_settings["Input Folder"])
         if idFileName == "":
             return
         QtWidgets.QMessageBox.information(self, "Info", "Please select mzml(s) to extract")   
