@@ -260,10 +260,12 @@ class InteractWithUser(QtWidgets.QMainWindow, form_class):
         while continue_loop:
             mzmlList = []
             bad_input = False
-            data = QtWidgets.QFileDialog.getOpenFileNames(self, "Select mzML files", os.path.dirname(idFileName))
+            data, _ = QtWidgets.QFileDialog.getOpenFileNames(self, "Select mzML files", os.path.dirname(idFileName))
+            print(data)
             if data == "": return
             else:
                 for path in data:
+                    print(path)
                     if path[-5:] != ".mzML":
                         bad_input = True
                         break
