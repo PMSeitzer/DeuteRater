@@ -67,14 +67,14 @@ def make_table(table, filename):
     table.setHorizontalHeaderLabels(header)
     for d in range(len(data)):
         for i in range(len(data[d])):
-           table.setItem(d, i, QtGui.QTableWidgetItem())
+           table.setItem(d, i, QtWidgets.QTableWidgetItem())
            table.item(d,i).setText(data[d][i])    
 
 def additional_row(table):
     new_count = table.rowCount() + 1
     table.setRowCount(new_count) #make sure it doesn't clear anything
     for i in range(table.columnCount()):
-        table.setItem(new_count-1, i, QtGui.QTableWidgetItem())
+        table.setItem(new_count-1, i, QtWidgets.QTableWidgetItem())
         table.item(new_count-1,i).setText("")  
 
 
@@ -227,8 +227,8 @@ class amount_of_labels(QtWidgets.QDialog, poss_label_class):
         self.LabelTable.setColumnCount(2)
         self.LabelTable.setHorizontalHeaderLabels(["Amino Acid", "Possible Labeling Sites"])
         for r in range(len(self.AAs)):
-            self.LabelTable.setItem(r,0, QtGui.QTableWidgetItem())
-            self.LabelTable.setItem(r,1, QtGui.QTableWidgetItem())
+            self.LabelTable.setItem(r,0, QtWidgets.QTableWidgetItem())
+            self.LabelTable.setItem(r,1, QtWidgets.QTableWidgetItem())
             self.LabelTable.item(r,0).setText(self.AAs[r])
             if pattern == "": self.LabelTable.item(r,1).setText("0")
             else: self.LabelTable.item(r,1).setText(str(self.data[self.AAs[r]][pattern]))

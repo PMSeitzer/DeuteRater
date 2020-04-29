@@ -338,11 +338,11 @@ class InteractWithUser(QtGui.QMainWindow, form_class):
         self.Labeling_Data.blockSignals(True)
         self.Labeling_Data.setRowCount(len(self.filenames))
         for r in range(len(self.filenames)):
-            self.Labeling_Data.setItem(r, 0, QtGui.QTableWidgetItem())
+            self.Labeling_Data.setItem(r, 0, QtWidgets.QTableWidgetItem())
             self.Labeling_Data.item(r,0).setText(self.filenames[r])
-            self.Labeling_Data.setItem(r, 1, QtGui.QTableWidgetItem())
+            self.Labeling_Data.setItem(r, 1, QtWidgets.QTableWidgetItem())
             self.Labeling_Data.item(r,1).setText("")
-            self.Labeling_Data.setItem(r, 2, QtGui.QTableWidgetItem())
+            self.Labeling_Data.setItem(r, 2, QtWidgets.QTableWidgetItem())
             self.Labeling_Data.item(r,2).setText("")
         self.Labeling_Data.blockSignals(False)
 
