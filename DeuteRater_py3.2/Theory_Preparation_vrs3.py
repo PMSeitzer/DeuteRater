@@ -106,6 +106,10 @@ def clean_up_data(data, f,AA_DICT, settings, filters):
         data[r][4] = analyze_mods(data[r][7],data[r][4])#must do first or the weight agreement will kill the peptide
         #this checks that there are enough peaks and that the thoeretical and measured m/z match. if not something is wrong and the row is deleted
         try:
+            # peppy = IC.peptide(settings["Heavy Element"], AA_DICT)
+            # print("settings[\"Heavy Element\"]", settings["Heavy Element"])
+            # print(peppy.composition(), ":", peppy.MW())
+
             theory_wt = IC.peptide(data[r][4], settings["Heavy Element"], AA_DICT).MW()
             if theory_wt > filters["mass cutoff"]: target = filters["Peaks included if over mass cutoff"]
             else:target = filters["Peaks included if under mass cutoff"]
@@ -117,6 +121,12 @@ def clean_up_data(data, f,AA_DICT, settings, filters):
                 filter_lt_target += 1
 
             if abs(theory_wt-float(data[r][6])) > filters["Weight Agreement"]:
+                print(
+                    data[r][1],
+                    data[r][4],
+                    "theory_wt:", theory_wt,
+                    "observed:", data[r][6]
+                )
                 filter_weight_agreement += 1
 
             if data[r][4] == '':
