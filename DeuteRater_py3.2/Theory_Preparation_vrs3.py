@@ -231,7 +231,7 @@ def begin_preparation(settings, filters, allowed_files, AA_DICT):
             #this particular check is to ensure that the m/z agrees with what the elemental composition says and that there are sufficient peaks for later analysis.
             print("before clean_up_data(): ",len(data))
             clean_up_data(data,f, AA_DICT, settings, filters) #puts data into proper format for the rest of the program
-            print("after cldan_up_data(): ",len(data))
+            print("after clean_up_data(): ",len(data))
             data = initial_filter(data, [4,3,6], filters["MZ Filter"], filters["RT Filter"])# filters sequences that are too close in both rt and m/z (too likely that a peak will be incorrectly assigned in calculations)
             data = check_mz(data, 7, 5, 8, 4, filters)#filters sequences where some peaks are missed.
             header = ['file', 'Protein ID', "Protein name", 'sequence', 'experimental mass', 'charge', 'observed retention time', 'observed m/z', 'abundances', "homologous proteins"]
