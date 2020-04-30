@@ -121,9 +121,11 @@ def clean_up_data(data, f,AA_DICT, settings, filters):
                 filter_lt_target += 1
 
             if abs(theory_wt-float(data[r][6])) > filters["Weight Agreement"]:
+                theory_comp = IC.peptide(data[r][4], settings["Heavy Element"], AA_DICT).Composition()
                 print(
                     data[r][1],
                     data[r][4],
+                    "formula:", theory_comp,
                     "theory_wt:", theory_wt,
                     "observed:", data[r][6]
                 )
