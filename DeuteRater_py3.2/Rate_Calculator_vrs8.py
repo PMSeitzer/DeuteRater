@@ -211,7 +211,7 @@ def rate_prep(data, analysis, settings, filters, water, Messages, Graph):
     #remove strings and np.nan's and then filter (filter does not work with strings)
     data = data[data['{0} std_dev'.format(lower_name)].apply(np.isreal)]
     data_filtered = data[data['{0} std_dev'.format(lower_name)] <= filters["{0} Agreement Filter".format(analysis)]]
-    if len(data_filtered > 0):
+    if len(data_filtered) > 0:
         #deal with roll_up or not for rate calculatiosn
         if settings["Roll Up"]:
             if "time" not in data_filtered.columns:
