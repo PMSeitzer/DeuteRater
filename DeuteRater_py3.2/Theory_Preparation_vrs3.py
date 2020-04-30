@@ -99,6 +99,9 @@ def analyze_mods(mod, seq):
         
 #this function pulls the Protein ID out and reorders the list  data into the form that will be used for the rest of the program
 def clean_up_data(data, f,AA_DICT, settings, filters):
+    filter_lt_target = 0;
+    filter_weight_agreement=0;
+    filter_empty_data=0;
     for r in reversed(range(len(data))):
         data[r][4] = analyze_mods(data[r][7],data[r][4])#must do first or the weight agreement will kill the peptide
         #this checks that there are enough peaks and that the thoeretical and measured m/z match. if not something is wrong and the row is deleted
@@ -108,6 +111,17 @@ def clean_up_data(data, f,AA_DICT, settings, filters):
             else:target = filters["Peaks included if under mass cutoff"]
             x = [float(y) for y in data[r][-2].split()]
             x = [a for a in x if a != 0] # returns values as zero if not present.  remove issues.
+
+            #debugging
+            if len(x) < target:
+                filter_lt_target += 1
+
+            if abs(theory_wt-float(data[r][6])) > filters["Weight Agreement"]:
+                filter_weight_agreement += 1
+
+            if data[r][4] == '':
+                filter_empty_data += 1
+
             if len(x) < target or abs(theory_wt-float(data[r][6])) > filters["Weight Agreement"]or data[r][4] == '':#deals with insufficient peaks, bad weight agreement, and bad mods
                 del data[r]
             else:
@@ -116,6 +130,12 @@ def clean_up_data(data, f,AA_DICT, settings, filters):
         #bad sequences are removed
         except KeyError: 
             del data[r]
+
+    print("clean_up_data() filters:",
+        "filter_lt_target:", filter_lt_target,
+        "filter_weight_agreement:", filter_weight_agreement,
+        "filter_empty_data:", filter_empty_data
+    )
 
 
 #data is the list, locations is a list of positions in the list, the filters should be floats, rt_ave is set for an agilent q-tof.  if you have a different machine please adjust
